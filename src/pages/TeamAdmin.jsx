@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { Users, UserPlus, Shield, Info, Download, Filter, Search, MoreHorizontal, CheckCircle2, ChevronRight, AlertTriangle, Lock } from 'lucide-react';
+import { Users, UserPlus, Shield, Info, Download, Filter, Search, MoreHorizontal, CheckCircle2, ChevronRight, AlertTriangle, Lock, Pencil, Check, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const TeamAdmin = () => {
@@ -29,6 +29,33 @@ const TeamAdmin = () => {
   ]);
 
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [editingNameId, setEditingNameId] = useState(null);
+  const [editingNameValue, setEditingNameValue] = useState('');
+
+  const startNameEdit = (member) => {
+    setEditingNameId(member.id);
+    setEditingNameValue(member.name);
+    setOpenDropdown(null);
+  };
+
+  const saveNameEdit = (memberId) => {
+    const trimmed = editingNameValue.trim();
+    if (!trimmed) {
+      toast.error('Name cannot be empty');
+      return;
+    }
+    const oldName = members.find(m => m.id === memberId)?.name;
+    // Recalculate initials from new name
+    const initials = trimmed.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    setMembers(members.map(m => m.id === memberId ? { ...m, name: trimmed, initial: initials } : m));
+    setEditingNameId(null);
+    toast.success(`Renamed "${oldName}" → "${trimmed}"`);
+  };
+
+  const cancelNameEdit = () => {
+    setEditingNameId(null);
+    setEditingNameValue('');
+  };
 
   const getRoleBadge = (role) => {
     switch (role) {
@@ -196,14 +223,35 @@ const TeamAdmin = () => {
                     <tr key={member.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-700/30 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-3">
-                          <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm ${member.bg}`}>
-                            {member.initial}
+                            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm flex-shrink-0 ${member.bg}`}>
+                              {member.initial}
+                            </div>
+                            <div>
+                              {editingNameId === member.id ? (
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    autoFocus
+                                    type="text"
+                                    value={editingNameValue}
+                                    onChange={(e) => setEditingNameValue(e.target.value)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter') saveNameEdit(member.id);
+                                      if (e.key === 'Escape') cancelNameEdit();
+                                    }}
+                                    className="text-sm font-medium text-[#0A192F] dark:text-slate-200 bg-white dark:bg-slate-700 border border-indigo-400 dark:border-indigo-500 rounded px-2 py-0.5 outline-none focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-600 w-36"
+                                  />
+                                  <button onClick={() => saveNameEdit(member.id)} className="p-1 text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 btn-press" title="Save"><Check size={14} /></button>
+                                  <button onClick={cancelNameEdit} className="p-1 text-rose-500 hover:text-rose-700 dark:text-rose-400 btn-press" title="Cancel"><X size={14} /></button>
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-1.5 group/name cursor-pointer" onClick={() => startNameEdit(member)} title="Click to rename">
+                                  <span className="font-medium text-[#0A192F] dark:text-slate-200 text-sm whitespace-nowrap">{member.name}</span>
+                                  <Pencil size={11} className="text-slate-400 dark:text-slate-500 opacity-0 group-hover/name:opacity-100 transition-opacity" />
+                                </div>
+                              )}
+                              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{member.email}</div>
+                            </div>
                           </div>
-                          <div>
-                            <div className="font-medium text-[#0A192F] dark:text-slate-200 text-sm whitespace-nowrap">{member.name}</div>
-                            <div className="text-xs text-slate-500 dark:text-slate-400">{member.email}</div>
-                          </div>
-                        </div>
                       </td>
                       <td className="px-6 py-4">
                         {getRoleBadge(member.role)}
