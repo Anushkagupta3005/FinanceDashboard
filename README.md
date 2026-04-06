@@ -8,7 +8,7 @@ The project focuses on clean component architecture, intuitive UX, and meaningfu
 
 ## Live Demo
 
-🔗 **[View Live →](https://your-deployment-url.vercel.app)**
+🔗 **[View Live →]([https://your-deployment-url.vercel.app](https://financedashboardd-f4r3lxrl6-anushkagupta3005s-projects.vercel.app/))**
 
 > Switch between roles using the role selector in the top header to see how the UI adapts in real time.
 
@@ -22,7 +22,7 @@ The project focuses on clean component architecture, intuitive UX, and meaningfu
 
 | Insights | Team Admin |
 |----------|-----------|
-| ![Insights](./screenshots/insights.png) | ![Team](./screenshots/team.png) |
+| ![Insights](C:\Users\Lenovo\OneDrive\Pictures\Screenshots\Screenshot 2026-04-06 214911.png) | ![Team](./screenshots/team.png) |
 
 ---
 
