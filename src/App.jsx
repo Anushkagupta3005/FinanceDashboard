@@ -7,10 +7,22 @@ import TeamAdmin from './pages/TeamAdmin';
 import { useAppContext } from './context/AppContext';
 
 function App() {
-  const { activeTab } = useAppContext();
+  const { activeTab, isLoading } = useAppContext();
 
   return (
     <Layout>
+      {isLoading ? (
+        <div className="w-full h-full flex flex-col space-y-6 animate-in fade-in">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="h-36 skeleton"></div>
+            <div className="h-36 skeleton"></div>
+            <div className="h-36 skeleton"></div>
+          </div>
+          <div className="h-[400px] skeleton"></div>
+        </div>
+      ) : (
+        <>
+
       {activeTab === 'Overview' && <Overview />}
       {activeTab === 'Transactions' && <Transactions />}
       {activeTab === 'Insights' && <Insights />}
@@ -23,6 +35,8 @@ function App() {
           <h2 className="text-xl font-semibold text-[#0A192F] mb-2">{activeTab}</h2>
           <p className="text-gray-500">This module is currently under development.</p>
         </div>
+      )}
+      </>
       )}
     </Layout>
   );

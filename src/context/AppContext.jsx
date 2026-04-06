@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Create the context
 const AppContext = createContext();
@@ -141,8 +141,42 @@ const initialTransactions = [
 
 // Provider component
 export const AppProvider = ({ children }) => {
-  const [currentRole, setCurrentRole] = useState('admin'); // 'admin', 'analyst', 'viewer'
-  const [transactions, setTransactions] = useState(initialTransactions);
+  // Load from localStorage or use defaults
+  const [currentRole, setCurrentRole] = useState(() => {
+    return localStorage.getItem('archLedger_role') || 'admin';
+  });
+  
+  const [transactions, setTransactions] = useState(() => {
+    const saved = localStorage.getItem('archLedger_transactions');
+    return saved ? JSON.parse(saved) : initialTransactions;
+  });
+
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('archLedger_theme') || 'light';
+  });
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulate loading delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Save changes to localStorage
+  useEffect(() => {
+    localStorage.setItem('archLedger_role', currentRole);
+  }, [currentRole]);
+
+  useEffect(() => {
+    localStorage.setItem('archLedger_transactions', JSON.stringify(transactions));
+  }, [transactions]);
+
+  useEffect(() => {
+    localStorage.setItem('archLedger_theme', theme);
+  }, [theme]);
   const [activeTab, setActiveTab] = useState('Overview');
   const [filters, setFilters] = useState({
     dateRange: 'all', // e.g. 'all', 'thisMonth', 'lastMonth'
@@ -159,7 +193,10 @@ export const AppProvider = ({ children }) => {
     activeTab,
     setActiveTab,
     filters,
-    setFilters
+    setFilters,
+    theme,
+    setTheme,
+    isLoading
   };
 
   return (
