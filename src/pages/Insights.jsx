@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MoreHorizontal, ArrowUpRight, ArrowDownRight, Server, Building2, CreditCard, Monitor, TrendingUp } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from 'recharts';
 import { useAppContext } from '../context/AppContext';
+import toast from 'react-hot-toast';
 
 // --- MOCK DATA ---
 const donutData = [
@@ -47,7 +48,10 @@ const Insights = () => {
           {['30 Days', '90 Days', 'YTD'].map(period => (
             <button
               key={period}
-              onClick={() => setTimePeriod(period)}
+              onClick={() => {
+                setTimePeriod(period);
+                toast(`Time frame updated to ${period}`, { icon: '📅' });
+              }}
               className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all cursor-pointer btn-press tracking-tight ${timePeriod === period ? 'bg-slate-100 dark:bg-slate-700 text-[#0A192F] dark:text-white shadow-sm' : 'text-gray-500 dark:text-slate-400 hover:text-[#0A192F] dark:hover:text-slate-200'}`}
             >
               {period}
@@ -63,7 +67,12 @@ const Insights = () => {
         <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6 shadow-sm flex flex-col relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold text-[#0A192F] dark:text-white tracking-tight">Spending by Category</h3>
-            <button className="text-gray-400 hover:text-gray-600 dark:text-slate-400 dark:hover:text-slate-200 cursor-pointer"><MoreHorizontal size={20} /></button>
+            <button 
+              onClick={() => toast('Chart options opened', { icon: '⚙️' })}
+              className="text-gray-400 hover:text-gray-600 dark:text-slate-400 dark:hover:text-slate-200 cursor-pointer"
+            >
+              <MoreHorizontal size={20} />
+            </button>
           </div>
           
           <div className="flex-1 relative min-h-[250px] w-full">
@@ -117,7 +126,12 @@ const Insights = () => {
         <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6 shadow-sm flex flex-col group hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold text-[#0A192F] dark:text-white tracking-tight">Inflow vs. Outflow</h3>
-            <button className="text-gray-400 hover:text-gray-600 dark:text-slate-400 dark:hover:text-slate-200 cursor-pointer"><MoreHorizontal size={20} /></button>
+            <button 
+              onClick={() => toast('Chart options opened', { icon: '⚙️' })}
+              className="text-gray-400 hover:text-gray-600 dark:text-slate-400 dark:hover:text-slate-200 cursor-pointer"
+            >
+              <MoreHorizontal size={20} />
+            </button>
           </div>
           
           <div className="flex-1 min-h-[220px] w-full">
@@ -159,7 +173,12 @@ const Insights = () => {
         <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm overflow-hidden flex flex-col group hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
           <div className="flex justify-between items-center p-5 border-b border-gray-100 dark:border-slate-700 bg-[#fbfbfb] dark:bg-slate-800/50">
             <h3 className="font-semibold text-[#0A192F] dark:text-white tracking-tight">Top Institutional Merchants</h3>
-            <button className="text-sm font-medium text-[#0A192F] dark:text-emerald-400 hover:text-indigo-600 dark:hover:text-emerald-500 transition-colors cursor-pointer tracking-tight">View All Report &rarr;</button>
+            <button 
+              onClick={() => toast('Loading complete merchant report...', { icon: '📊' })}
+              className="text-sm font-medium text-[#0A192F] dark:text-emerald-400 hover:text-indigo-600 dark:hover:text-emerald-500 transition-colors cursor-pointer tracking-tight"
+            >
+              View All Report &rarr;
+            </button>
           </div>
           <div className="overflow-x-auto w-full">
             <table className="w-full text-left text-sm whitespace-nowrap min-w-[500px]">

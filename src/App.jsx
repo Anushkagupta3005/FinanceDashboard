@@ -5,12 +5,31 @@ import Transactions from './pages/Transactions';
 import Insights from './pages/Insights';
 import TeamAdmin from './pages/TeamAdmin';
 import { useAppContext } from './context/AppContext';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
-  const { activeTab, isLoading } = useAppContext();
+  const { activeTab, isLoading, theme } = useAppContext();
+  const isDark = theme === 'dark';
 
   return (
     <Layout>
+      <Toaster 
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            background: isDark ? '#1e293b' : '#ffffff',
+            color: isDark ? '#f8fafc' : '#1e293b',
+            border: isDark ? '1px solid #334155' : '1px solid #e2e8f0',
+            borderRadius: '10px',
+            fontSize: '14px',
+            fontWeight: '500',
+          },
+          success: {
+            iconTheme: { primary: '#10b981', secondary: '#fff' },
+          },
+          duration: 3000,
+        }}
+      />
       {isLoading ? (
         <div className="w-full h-full flex flex-col space-y-6 animate-in fade-in duration-500 relative z-0">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { Users, UserPlus, Shield, Info, Download, Filter, Search, MoreHorizontal, CheckCircle2, ChevronRight, AlertTriangle, Lock } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const TeamAdmin = () => {
   const { currentRole } = useAppContext();
@@ -43,8 +44,10 @@ const TeamAdmin = () => {
   };
 
   const handleRoleChange = (memberId, newRole) => {
+    const member = members.find(m => m.id === memberId);
     setMembers(members.map(m => m.id === memberId ? { ...m, role: newRole } : m));
     setOpenDropdown(null);
+    toast.success(`${member?.name}'s role updated to ${newRole}`);
   };
 
   return (
@@ -55,7 +58,10 @@ const TeamAdmin = () => {
           <h1 className="text-2xl font-bold text-[#0A192F] dark:text-white mb-1 tracking-tight">Team Management</h1>
           <p className="text-slate-500 dark:text-slate-400 text-sm">Orchestrate access levels and invite institutional collaborators.</p>
         </div>
-        <button className="flex items-center justify-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-all shadow-sm btn-press hover:shadow-md max-w-max">
+        <button 
+          onClick={() => toast.success('Invitation sent! Member will receive an email shortly.', { icon: '📧' })}
+          className="flex items-center justify-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-all shadow-sm btn-press hover:shadow-md max-w-max"
+        >
           <UserPlus className="w-4 h-4" />
           <span>Invite Member</span>
         </button>
@@ -160,10 +166,16 @@ const TeamAdmin = () => {
             <div className="p-5 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
               <h2 className="text-lg font-semibold text-[#0A192F] dark:text-white tracking-tight">Authorized Personnel</h2>
               <div className="flex space-x-2">
-                <button className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors btn-press">
+                <button 
+                  onClick={() => toast('Filter panel opened', { icon: '🔍' })}
+                  className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors btn-press"
+                >
                   <Filter className="w-4 h-4" />
                 </button>
-                <button className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors btn-press">
+                <button 
+                  onClick={() => toast.success('Personnel list exported successfully', { icon: '📥' })}
+                  className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors btn-press"
+                >
                   <Download className="w-4 h-4" />
                 </button>
               </div>
@@ -235,10 +247,22 @@ const TeamAdmin = () => {
             <div className="p-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex items-center justify-between">
               <span className="text-xs text-slate-500 dark:text-slate-400">Showing 4 of 14 active members</span>
               <div className="flex items-center space-x-1">
-                <button className="w-7 h-7 flex items-center justify-center rounded text-xs font-medium bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/50 btn-press">1</button>
-                <button className="w-7 h-7 flex items-center justify-center rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 btn-press">2</button>
-                <button className="w-7 h-7 flex items-center justify-center rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 btn-press">3</button>
-                <button className="w-7 h-7 flex items-center justify-center rounded text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 btn-press"><ChevronRight className="w-4 h-4" /></button>
+                <button 
+                  onClick={() => toast('Page 1 — currently viewing', { icon: '📄' })}
+                  className="w-7 h-7 flex items-center justify-center rounded text-xs font-medium bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/50 btn-press"
+                >1</button>
+                <button 
+                  onClick={() => toast('Loading page 2...', { icon: '📄' })}
+                  className="w-7 h-7 flex items-center justify-center rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 btn-press"
+                >2</button>
+                <button 
+                  onClick={() => toast('Loading page 3...', { icon: '📄' })}
+                  className="w-7 h-7 flex items-center justify-center rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 btn-press"
+                >3</button>
+                <button 
+                  onClick={() => toast('Loading next page...', { icon: '➡️' })}
+                  className="w-7 h-7 flex items-center justify-center rounded text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 btn-press"
+                ><ChevronRight className="w-4 h-4" /></button>
               </div>
             </div>
           </div>
@@ -253,7 +277,10 @@ const TeamAdmin = () => {
             Role modifications are logged in the sovereign audit trail. Changing an Admin role requires secondary verification from another authorized administrator.
           </p>
         </div>
-        <button className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 whitespace-nowrap shrink-0 ml-8 md:ml-0 hover:underline">
+        <button 
+          onClick={() => toast('Opening sovereign audit trail log...', { icon: '📋' })}
+          className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 whitespace-nowrap shrink-0 ml-8 md:ml-0 hover:underline"
+        >
           View Audit Trail
         </button>
       </div>

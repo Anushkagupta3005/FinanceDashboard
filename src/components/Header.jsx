@@ -1,6 +1,7 @@
 import React from 'react';
 import { Search, Bell, HelpCircle, Menu, Moon, Sun } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import toast from 'react-hot-toast';
 
 const Header = ({ toggleSidebar }) => {
   const { currentRole, setCurrentRole, theme, setTheme } = useAppContext();
@@ -54,19 +55,28 @@ const Header = ({ toggleSidebar }) => {
           {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
         </button>
 
-        <button className="text-gray-400 hover:text-gray-600 transition-colors relative">
+        <button 
+          className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors relative btn-press"
+          onClick={() => toast('You have 3 new notifications', { icon: '🔔' })}
+        >
           <Bell size={20} />
           {/* Notification Dot */}
           <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white translate-x-1/2 -translate-y-1/4"></span>
         </button>
-        <button className="text-gray-400 hover:text-gray-600 transition-colors">
+        <button 
+          className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors btn-press"
+          onClick={() => toast('Help Center coming soon!', { icon: '❓' })}
+        >
           <HelpCircle size={20} />
         </button>
 
         <div className="hidden sm:block h-6 w-px bg-gray-200 dark:bg-slate-700 mx-1 sm:mx-2"></div>
 
         {/* User Profile */}
-        <button className="flex items-center gap-2 sm:gap-3 text-left hover:bg-gray-50 dark:hover:bg-slate-800 p-1 sm:pr-2 rounded-full border border-transparent hover:border-gray-200 dark:hover:border-slate-700 transition-all btn-press">
+        <button 
+          className="flex items-center gap-2 sm:gap-3 text-left hover:bg-gray-50 dark:hover:bg-slate-800 p-1 sm:pr-2 rounded-full border border-transparent hover:border-gray-200 dark:hover:border-slate-700 transition-all btn-press"
+          onClick={() => toast('Profile menu opened', { icon: '👤' })}
+        >
           <img
             src="https://i.pravatar.cc/150?u=a04258114e29026702d"
             alt="Eleanor Pena"

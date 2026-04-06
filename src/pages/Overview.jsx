@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Wallet, TrendingUp, TrendingDown, ArrowRightLeft, CreditCard, Download, ArrowUpRight } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAppContext } from '../context/AppContext';
+import toast from 'react-hot-toast';
 
 const chartData = [
   { name: 'MAR 01', netWorth: 110000 },
@@ -36,7 +37,10 @@ const Overview = () => {
         
         {/* Action Button */}
         {canAction && (
-          <button className="bg-[#0A192F] dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm flex items-center gap-2 group cursor-pointer btn-press">
+          <button 
+            className="bg-[#0A192F] dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm flex items-center gap-2 group cursor-pointer btn-press"
+            onClick={() => toast.success('Initiating new transfer...')}
+          >
             <Plus size={16} className="group-hover:scale-110 transition-transform" />
             New Transfer
           </button>
@@ -110,7 +114,10 @@ const Overview = () => {
               {['1M', '6M', '1Y'].map((tab) => (
                 <button
                   key={tab}
-                  onClick={() => setTimeFilter(tab)}
+                  onClick={() => {
+                    setTimeFilter(tab);
+                    toast(`Chart data mocked for ${tab}`, { icon: '📊' });
+                  }}
                   className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer btn-press ${
                     timeFilter === tab
                       ? 'bg-white dark:bg-slate-700 text-[#0A192F] dark:text-white shadow-sm'
@@ -158,6 +165,7 @@ const Overview = () => {
             {/* Action 1 */}
             <button 
               disabled={!canAction}
+              onClick={() => toast.success('Transfer flow opened')}
               className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all btn-press ${
                 canAction 
                   ? 'border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-[#0A192F]/50 dark:hover:border-emerald-500/50 hover:shadow-md cursor-pointer group' 
@@ -176,6 +184,7 @@ const Overview = () => {
             {/* Action 2 */}
             <button 
               disabled={!canAction}
+              onClick={() => toast.success('Bill payment flow opened')}
               className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all btn-press ${
                 canAction 
                   ? 'border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:shadow-md cursor-pointer group' 
@@ -194,6 +203,7 @@ const Overview = () => {
             {/* Action 3 */}
             <button 
               disabled={!canAction}
+              onClick={() => toast.success('Money request flow opened')}
               className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all btn-press ${
                 canAction 
                   ? 'border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-emerald-300 dark:hover:border-emerald-500/50 hover:shadow-md cursor-pointer group' 

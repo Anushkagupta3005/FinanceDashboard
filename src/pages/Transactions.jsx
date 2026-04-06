@@ -4,6 +4,7 @@ import {
   Download, FileText, Search, SlidersHorizontal, ChevronLeft, ChevronRight,
   TrendingDown, Plus, X, ArrowUpRight, DollarSign, Activity, FileQuestion
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Transactions = () => {
   const { currentRole, transactions, filters, setFilters, theme } = useAppContext();
@@ -98,11 +99,17 @@ const Transactions = () => {
         
         {isAdmin && (
           <div className="flex flex-wrap items-center gap-3">
-            <button className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-[#0A192F] dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-sm flex items-center gap-2 cursor-pointer btn-press">
+            <button 
+              onClick={() => toast.success('CSV Export downloaded safely', { icon: '🗃️' })}
+              className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-[#0A192F] dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-sm flex items-center gap-2 cursor-pointer btn-press"
+            >
               <Download size={16} />
               Export CSV
             </button>
-            <button className="bg-[#0A192F] dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-sm flex items-center gap-2 cursor-pointer btn-press">
+            <button 
+              onClick={() => toast.success('PDF Report generated', { icon: '📄' })}
+              className="bg-[#0A192F] dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-sm flex items-center gap-2 cursor-pointer btn-press"
+            >
               <FileText size={16} />
               PDF Report
             </button>
@@ -163,7 +170,10 @@ const Transactions = () => {
           >
             Clear all
           </button>
-          <button className="p-2 border border-gray-200 dark:border-slate-700 text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-700 rounded-lg transition-colors cursor-pointer btn-press">
+          <button 
+            onClick={() => toast('Advanced filters opened', { icon: '⚙️' })}
+            className="p-2 border border-gray-200 dark:border-slate-700 text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-700 rounded-lg transition-colors cursor-pointer btn-press"
+          >
             <SlidersHorizontal size={18} />
           </button>
         </div>
@@ -329,7 +339,10 @@ const Transactions = () => {
         <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-6 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-semibold text-[#0A192F] dark:text-white">Top Entity Activity</h3>
-            <button className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors cursor-pointer">
+            <button 
+              onClick={() => toast('Entity Map visualization loading...', { icon: '🗺️' })}
+              className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors cursor-pointer"
+            >
               View Entity Map
             </button>
           </div>
@@ -430,7 +443,10 @@ const Transactions = () => {
 
             {isAdmin && (
               <div className="p-6 border-t border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 z-10 sticky bottom-0">
-                <button className="w-full bg-[#0A192F] dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-700 text-white py-3 rounded-xl text-sm font-medium transition-all shadow-md hover:shadow-lg cursor-pointer btn-press group flex justify-center items-center gap-2">
+                <button 
+                  onClick={() => toast.success('Transaction edit mode enabled')}
+                  className="w-full bg-[#0A192F] dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-700 text-white py-3 rounded-xl text-sm font-medium transition-all shadow-md hover:shadow-lg cursor-pointer btn-press group flex justify-center items-center gap-2"
+                >
                   Edit Transaction Record
                 </button>
               </div>
