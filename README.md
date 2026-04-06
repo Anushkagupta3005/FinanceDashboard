@@ -1,27 +1,3 @@
-> **Institutional Finance Dashboard** — A clean, role-aware finance management interface built for tracking liquidity, capital flows, and spending intelligence.
-
-![Dashboard Preview](./screenshots/overview.png)
-
----
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Live Demo](#live-demo)
-- [Screenshots](#screenshots)
-- [Tech Stack](#tech-stack)
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [Role-Based Access](#role-based-access)
-- [State Management](#state-management)
-- [Technical Decisions](#technical-decisions)
-- [Known Limitations](#known-limitations)
-- [Future Improvements](#future-improvements)
-- [Author](#author)
-
----
-
 ## Overview
 
 Architectural Ledger is a frontend-only finance dashboard built as part of a UI engineering assignment. It simulates an institutional finance management platform where users can monitor balances, explore transactions, analyze spending patterns, and manage team access — all gated by a role-based access control (RBAC) system simulated entirely on the frontend.
