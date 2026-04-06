@@ -1,116 +1,77 @@
-# Architectural Ledger
+# Architectural Ledger - Institutional Finance Dashboard
 
-> **Institutional Finance Dashboard** — A clean, role-aware finance management interface built for tracking liquidity, capital flows, and spending intelligence.
+Architectural Ledger is a highly polished, responsive, and data-rich finance dashboard prototype designed to simulate institutional liquidity and asset management tracking. It offers an intuitive, premium interface featuring dark mode, extensive micro-interactions, responsive constraints, and role-based access control.
 
----
+## 🚀 Project Overview
 
-## 🔗 Live Demo
+The dashboard visualizes capital flows, tracks transaction history across multiple entities, provides deep analytical spending insights, and facilitates team access administration. Built with modern web development standards, it prioritizes visual excellence and user experience, incorporating features such as skeleton loaders, dynamic empty states, and comprehensive responsiveness.
 
-**[View Live Deployment →](https://tinyurl.com/mrx6pk9f)**
+### Key Features
+- **Overview Dashboard**: High-level fiscal metrics, interactive net worth area chart, and recent activity summary.
+- **Transactions Ledger**: Advanced filterable transaction history with pagination and detailed sliding drawer overlays.
+- **Spending Insights**: Deep dive analytics featuring donut charts, grouped bar charts, and operational budget trackers.
+- **Team Management**: Role hierarchy administration with mock institutional security restrictions.
+- **Role-Based Access Control (RBAC)**: Switch between `Admin`, `Analyst`, and `Viewer` to see UI adjust intelligently (e.g., restricted access to Team Management for non-admins, disabled "Transfer" features for Viewers).
+- **Dark Mode Support**: Context-driven theme toggling (Light/Navy Dark Mode) with comprehensive styling adjustments across all charts and UI components.
+- **Data Persistence**: Uses `localStorage` to save user preferences, currently active role, theme settings, and simulated transaction states upon refresh.
+- **Premium Micro-Interactions**: Smooth page transitions, hover-lift shadow effects on cards, click feedback on buttons, and custom tooltip logic.
 
-> Switch between roles using the role selector in the top header to see how the UI adapts in real time.
+## 🛠 Tech Stack
 
----
+- **React / Vite**: Core framework and development environment.
+- **Tailwind CSS**: Styling, typography, responsive design, and CSS micro-interactions.
+- **Recharts**: Data visualization for complex area, pie, and bar charts.
+- **React Context API**: Global state management (RBAC, Theming, Active Navigation, Transaction Filtering).
+- **Lucide-React**: Consistent and crisp vector icons.
 
-## 🖼️ Screenshots
-
-### Overview Dashboard
-![Overview](screenshots/overview.png)
-
-### Transaction History
-![Transactions](screenshots/transaction.png)
-
-### Spending Insights
-![Insights](screenshots/insights.png)
-
-### Team Administration
-![Team Admin](screenshots/team-admin.png)
-
----
-
-## 🚀 Features
-
-### Core
-- **Responsive Layout** — Adapts gracefully from desktop to mobile with a collapsible off-canvas sidebar
-- **Dark Mode** — Persisted dark mode support with tailored aesthetic adjustments
-- **Role-Based Access Control** — Admins, Analysts, and Viewers see different feature sets and action states
-- **Data Persistence** — Transactions and current user role state are saved locally across sessions
-- **Micro-Interactions** — Loading skeleton, press-animations on buttons, and smooth hover lifts on cards
-
-### 📋 Pages
-| Page | Description |
-|------|-------------|
-| **Overview** | High-level financial summary — Total Balance, Monthly Income/Expenses, Cash Flow chart |
-| **Transactions** | Filterable & sortable transaction records with category badges, export options |
-| **Insights** | Donut charts, bar charts, merchant tables, savings efficacy, budget utilization |
-| **Team Admin** | Role hierarchy, authorized personnel, seat usage — Admin only |
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Choice | Reason |
-|-------|--------|--------|
-| **Framework** | React 18 | Component model, hooks, Context API |
-| **Styling** | Tailwind CSS v4 | Utility-first, premium layout styling |
-| **Charts** | Recharts | React-native API for interactive visualizations |
-| **Icons** | Lucide React | Consistent, clean SVG icon system |
-| **Tooling** | Vite | Fast dev server, optimized builds |
-| **State** | Context API | Global state without Redux overhead |
-| **Persistence** | localStorage | Session continuity across page refreshes |
-
----
-
-## 💻 Getting Started
+##  How to Run Locally
 
 ### Prerequisites
-- Node.js 18+
-- npm or yarn
+Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
 
-### Installation
+### Instructions
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/Anushkagupta3005/FinanceDashboard.git
+1. **Clone the repository:**
+   ```bash
+   git clone <repository_url>
+   cd <repository_name>
+   ```
 
-# 2. Navigate into the project
-cd FinanceDashboard
+2. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
 
-# 3. Install dependencies
-npm install
+3. **Start the Development Server:**
+   ```bash
+   npm run dev
+   ```
 
-# 4. Start the development server
-npm run dev
-```
+4. **View in Browser:**
+   Open [http://localhost:5173/](http://localhost:5173/) in your web browser.
 
-The app will be available at `http://localhost:5173`
+## 🎭 Role Switching Instructions
 
----
+To simulate the dashboard's Role-Based Access Control (RBAC), locate the **Role Switcher Dropdown** in the top-right header navigation bar.
 
-## 🔐 Role-Based Access
+1. **Viewer**: Limited permissions. Action buttons (like "New Transfer") are disabled. Cannot access the Team Management dashboard.
+2. **Analyst**: Has read/write visualization. Can initiate mock transfers.
+3. **Admin**: Full access. Can modify roles in the "Team Admin" tab and edit raw transaction records.
 
-Switch roles using the **dropdown in the top header bar** to preview each experience.
+*Note: Selected roles are stored in `localStorage`, maintaining your mocked authorization state across visits.*
 
-| Feature | Viewer | Analyst | Admin |
-|---------|:------:|:-------:|:-----:|
-| View Overview | ✅ | ✅ | ✅ |
-| View Transactions | ✅ | ✅ | ✅ |
-| Filter & Search | ✅ | ✅ | ✅ |
-| View Insights | ✅ | ✅ | ✅ |
-| New Transfer button | ❌ | ✅ | ✅ |
-| Export CSV / PDF | ❌ | ❌ | ✅ |
-| Team Admin page | ❌ | ❌ | ✅ |
-| Edit Member Roles | ❌ | ❌ | ✅ |
+## 📸 Screenshots
 
-> **Note:** RBAC is UI-only, intended for frontend demonstration purposes only.
+*(Replace placeholder links with direct image repository paths)*
 
----
+### 1. Dashboard Overview
+![Overview Dashboard Placeholder](https://via.placeholder.com/1200x800?text=Dashboard+Overview+Screenshot)
 
-## 👤 Author
+### 2. Transaction Ledger with Drawer
+![Transactions Ledger Placeholder](https://via.placeholder.com/1200x800?text=Transactions+Ledger+Drawer)
 
-**Anushka Gupta**
-- GitHub: [@Anushkagupta3005](https://github.com/Anushkagupta3005)
+### 3. Spending Insights
+![Spending Insights Analytics](https://via.placeholder.com/1200x800?text=Insights+Analytics)
 
----
-
-<p align="center">Built with ❤️ using React · Tailwind CSS · Recharts</p>
+### 4. Dark Mode Variation
+![Dark Mode View](https://via.placeholder.com/1200x800?text=Dark+Mode+Variation+-+Navy+Theme)
