@@ -6,7 +6,7 @@
 
 ## 🔗 Live Demo
 
-**[View Live Deployment →](https://tinyurl.com/mrx6pk9f)**
+**[View Live Deployment →](https://financedashboardd-r9ihpkurc-anushkagupta3005s-projects.vercel.app/)**
 
 > Switch between roles using the role selector in the top header to see how the UI adapts in real time.
 
