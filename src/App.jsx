@@ -5,11 +5,29 @@ import Transactions from './pages/Transactions';
 import Insights from './pages/Insights';
 import TeamAdmin from './pages/TeamAdmin';
 import { useAppContext } from './context/AppContext';
+import { useAuth } from './context/AuthContext';
+import Login from './components/Login';
 import { Toaster } from 'react-hot-toast';
+import { Loader2 } from 'lucide-react';
 
 function App() {
   const { activeTab, isLoading, theme } = useAppContext();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const isDark = theme === 'dark';
+
+  // While verifying an existing session token, show a small loader.
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-950">
+        <Loader2 className="animate-spin text-[#0A192F] dark:text-emerald-400" size={32} />
+      </div>
+    );
+  }
+
+  // Not logged in -> show the login screen instead of the dashboard.
+  if (!isAuthenticated) {
+    return <Login />;
+  }
 
   return (
     <Layout>

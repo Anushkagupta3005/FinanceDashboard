@@ -5,10 +5,30 @@ import {
   TrendingDown, Plus, X, ArrowUpRight, DollarSign, Activity, FileQuestion
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { api } from '../api/client';
 
 const Transactions = () => {
   const { currentRole, transactions, filters, setFilters, theme } = useAppContext();
   const isAdmin = currentRole === 'admin';
+
+  // Real CSV export: fetch from the backend and trigger a browser download.
+  const handleExportCsv = async () => {
+    try {
+      const res = await api.exportCsvResponse();
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'transactions.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      toast.success('CSV exported', { icon: '🗃️' });
+    } catch (err) {
+      toast.error(err.message || 'Export failed');
+    }
+  };
 
   // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -100,7 +120,7 @@ const Transactions = () => {
         {isAdmin && (
           <div className="flex flex-wrap items-center gap-3">
             <button 
-              onClick={() => toast.success('CSV Export downloaded safely', { icon: '🗃️' })}
+              onClick={handleExportCsv}
               className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-[#0A192F] dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-sm flex items-center gap-2 cursor-pointer btn-press"
             >
               <Download size={16} />

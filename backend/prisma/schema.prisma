@@ -1,0 +1,87 @@
+// Prisma schema for the Architectural Ledger finance dashboard.
+// Normalized relational model: users own transactions, transactions
+// reference a category, and every sensitive action is written to an audit log.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  VIEWER
+  ANALYST
+  ADMIN
+}
+
+enum TxType {
+  income
+  expense
+}
+
+enum TxStatus {
+  completed
+  pending
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         Role      @default(VIEWER)
+  avatarUrl    String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  transactions Transaction[]
+  auditLogs    AuditLog[]
+
+  @@index([role])
+}
+
+model Category {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  transactions Transaction[]
+}
+
+model Transaction {
+  id          String   @id @default(cuid())
+  reference   String   @unique // human-facing id, e.g. "TRX-101"
+  date        DateTime
+  description String
+  subtext     String?
+  type        TxType
+  status      TxStatus @default(completed)
+  amount      Decimal  @db.Decimal(18, 2)
+  entity      String
+
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([type])
+  @@index([status])
+  @@index([date])
+  @@index([categoryId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String // e.g. "TRANSACTION_CREATED", "ROLE_CHANGED", "EXPORT_CSV"
+  detail    String?
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
