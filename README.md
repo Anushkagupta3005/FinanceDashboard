@@ -1,116 +1,172 @@
 # Architectural Ledger
 
-> **Institutional Finance Dashboard** — A clean, role-aware finance management interface built for tracking liquidity, capital flows, and spending intelligence.
+A full-stack finance dashboard for tracking liquidity, capital flows, and spending
+intelligence — with real authentication, server-enforced role-based access control, and
+insights computed live from a Postgres-backed transactions API.
 
 ---
 
-## 🔗 Live Demo
+## Screenshots
 
-**[View Live Deployment →](https://financedashboardd-r9ihpkurc-anushkagupta3005s-projects.vercel.app/)**
+| Overview | Transactions |
+| --- | --- |
+| ![Overview](screenshots/overview.png) | ![Transactions](screenshots/transaction.png) |
 
-> Switch between roles using the role selector in the top header to see how the UI adapts in real time.
-
----
-
-## 🖼️ Screenshots
-
-### Overview Dashboard
-![Overview](screenshots/overview.png)
-
-### Transaction History
-![Transactions](screenshots/transaction.png)
-
-### Spending Insights
-![Insights](screenshots/insights.png)
-
-### Team Administration
-![Team Admin](screenshots/team-admin.png)
+| Insights | Team Admin |
+| --- | --- |
+| ![Insights](screenshots/insights.png) | ![Team Admin](screenshots/team-admin.png) |
 
 ---
 
-## 🚀 Features
+## Features
 
-### Core
-- **Responsive Layout** — Adapts gracefully from desktop to mobile with a collapsible off-canvas sidebar
-- **Dark Mode** — Persisted dark mode support with tailored aesthetic adjustments
-- **Role-Based Access Control** — Admins, Analysts, and Viewers see different feature sets and action states
-- **Data Persistence** — Transactions and current user role state are saved locally across sessions
-- **Micro-Interactions** — Loading skeleton, press-animations on buttons, and smooth hover lifts on cards
-
-### 📋 Pages
-| Page | Description |
-|------|-------------|
-| **Overview** | High-level financial summary — Total Balance, Monthly Income/Expenses, Cash Flow chart |
-| **Transactions** | Filterable & sortable transaction records with category badges, export options |
-| **Insights** | Donut charts, bar charts, merchant tables, savings efficacy, budget utilization |
-| **Team Admin** | Role hierarchy, authorized personnel, seat usage — Admin only |
+- **Authentication & RBAC** — JWT-based login with bcrypt-hashed passwords. Three roles
+  (Admin, Analyst, Viewer), enforced server-side — a Viewer hitting a write endpoint gets
+  a real `403`, not just a hidden button.
+- **Transactions API** — full CRUD with server-side filtering, search, sorting, and
+  pagination.
+- **Live insights** — balance, cash flow, category breakdowns, and top counterparties,
+  all computed from the database and updated instantly when a transaction is added.
+- **CSV export** and an **audit log** of sensitive actions (Admin only).
+- **Responsive UI** — dark mode, collapsible sidebar, loading skeletons, and smooth
+  micro-interactions.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech stack
 
-| Layer | Choice | Reason |
-|-------|--------|--------|
-| **Framework** | React 18 | Component model, hooks, Context API |
-| **Styling** | Tailwind CSS v4 | Utility-first, premium layout styling |
-| **Charts** | Recharts | React-native API for interactive visualizations |
-| **Icons** | Lucide React | Consistent, clean SVG icon system |
-| **Tooling** | Vite | Fast dev server, optimized builds |
-| **State** | Context API | Global state without Redux overhead |
-| **Persistence** | localStorage | Session continuity across page refreshes |
+| Layer | Choice |
+| --- | --- |
+| Frontend | React 18, Tailwind CSS v4, Recharts, Vite |
+| Backend | Node.js, Express |
+| Database | PostgreSQL (via Prisma ORM) |
+| Auth | JWT + bcrypt |
+| Validation | Zod |
 
 ---
 
-## 💻 Getting Started
+## Getting started
 
-### Prerequisites
-- Node.js 18+
-- npm or yarn
+You'll need Node.js 18+ and a Postgres database (local via Docker, or a free hosted one
+like Neon, Railway, or Supabase).
 
-### Installation
+### Backend
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/Anushkagupta3005/FinanceDashboard.git
-
-# 2. Navigate into the project
-cd FinanceDashboard
-
-# 3. Install dependencies
+cd backend
 npm install
 
-# 4. Start the development server
-npm run dev
+cp .env.example .env
+# set DATABASE_URL to your Postgres instance, and a real JWT_SECRET
+
+npm run prisma:migrate      # creates the schema
+npm run seed                # seeds demo users + sample transactions
+
+npm run dev                 # http://localhost:4000
 ```
 
-The app will be available at `http://localhost:5173`
+No Postgres handy? Spin one up with Docker:
+
+```bash
+docker run --name ledger-db -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=finance_dashboard -p 5432:5432 -d postgres:16
+```
+
+### Frontend
+
+```bash
+cd ..            # repo root
+npm install
+
+cp .env.example .env
+# set VITE_API_URL=http://localhost:4000/api
+
+npm run dev                 # http://localhost:5173
+```
+
+### Log in
+
+| Role    | Email              | Password    | Can do                                                 |
+| ------- | ------------------ | ----------- | ------------------------------------------------------- |
+| Admin   | admin@ledger.dev   | admin1234   | Everything — create/edit/delete, export, manage roles   |
+| Analyst | analyst@ledger.dev | analyst1234 | View + create/edit transactions                         |
+| Viewer  | viewer@ledger.dev  | viewer1234  | View only                                                |
 
 ---
 
-## 🔐 Role-Based Access
+## API reference
 
-Switch roles using the **dropdown in the top header bar** to preview each experience.
+Base URL: `http://localhost:4000/api`
+Send the token from login/register as `Authorization: Bearer <token>`.
 
-| Feature | Viewer | Analyst | Admin |
-|---------|:------:|:-------:|:-----:|
-| View Overview | ✅ | ✅ | ✅ |
-| View Transactions | ✅ | ✅ | ✅ |
-| Filter & Search | ✅ | ✅ | ✅ |
-| View Insights | ✅ | ✅ | ✅ |
-| New Transfer button | ❌ | ✅ | ✅ |
-| Export CSV / PDF | ❌ | ❌ | ✅ |
-| Team Admin page | ❌ | ❌ | ✅ |
-| Edit Member Roles | ❌ | ❌ | ✅ |
+### Auth
 
-> **Note:** RBAC is UI-only, intended for frontend demonstration purposes only.
+| Method | Path | Access | Description |
+| ------ | ---- | ------ | ----------- |
+| POST | `/auth/register` | Public | Register (defaults to Viewer) |
+| POST | `/auth/login` | Public | Log in, returns `{ token, user }` |
+| GET | `/auth/me` | Auth | Current user |
+
+### Transactions
+
+| Method | Path | Access | Description |
+| ------ | ---- | ------ | ----------- |
+| GET | `/transactions` | Any role | List — filters + pagination (below) |
+| GET | `/transactions/:id` | Any role | Single transaction |
+| POST | `/transactions` | Analyst, Admin | Create |
+| PUT | `/transactions/:id` | Analyst, Admin | Update |
+| DELETE | `/transactions/:id` | Admin | Delete |
+| GET | `/transactions/export/csv` | Admin | Download filtered CSV |
+
+**List query params:** `type` (income\|expense), `status` (completed\|pending),
+`category`, `search`, `page`, `pageSize`, `sort` (date\|amount), `order` (asc\|desc).
+Example: `/transactions?type=expense&search=blackstone&page=1&pageSize=7`
+
+### Insights (any role)
+
+| Method | Path | Description |
+| ------ | ---- | ----------- |
+| GET | `/insights/summary` | Balance, income, expense, cash flow |
+| GET | `/insights/by-category` | Totals grouped by category |
+| GET | `/insights/top-entities` | Largest counterparties |
+
+### Team Admin (Admin only)
+
+| Method | Path | Description |
+| ------ | ---- | ----------- |
+| GET | `/users` | List all users |
+| PATCH | `/users/:id/role` | Change a user's role |
+| GET | `/audit-log` | Recent activity feed |
 
 ---
 
-## 👤 Author
+## Architecture
+
+Permissions are enforced in `backend/src/routes/index.js` via `requireRole(...)`
+middleware (`backend/src/middleware/auth.js`), not in the UI — so access control holds
+even if someone bypasses the frontend entirely. Every sensitive action is recorded in the
+`AuditLog` table.
+
+```
+.
+├── src/                    # React frontend
+├── backend/
+│   ├── prisma/
+│   │   ├── schema.prisma   # User, Category, Transaction, AuditLog
+│   │   └── seed.js         # demo users + sample transactions
+│   └── src/
+│       ├── server.js       # Express app
+│       ├── config/prisma.js
+│       ├── middleware/     # auth (JWT + RBAC), error handling
+│       ├── controllers/    # auth, transactions, insights, users
+│       ├── routes/index.js # all routes + permission guards
+│       └── utils/          # token, audit, CSV, serialization helpers
+└── screenshots/
+```
+
+---
+
+## Author
 
 **Anushka Gupta**
-- GitHub: [@Anushkagupta3005](https://github.com/Anushkagupta3005)
-
----
-
-<p align="center">Built with ❤️ using React · Tailwind CSS · Recharts</p>
+GitHub: [@Anushkagupta3005](https://github.com/Anushkagupta3005)
